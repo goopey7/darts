@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/darts.dir/Player.cpp.o CMakeFiles/darts.dir/main.cpp.o -o darts 
