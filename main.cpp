@@ -34,6 +34,7 @@ int main()
 
 		std::vector<int> bullseyes(2);
 		std::vector<int> dartsThrown(2);
+		std::vector<int> turns(2);
 
 		int winner = -1;
 		Player* winningPlayer;
@@ -42,6 +43,7 @@ int main()
 		while(true)
 		{
 			std::cout << "Current Player: " << players[i]->getName() << std::endl;
+			turns[i]++;
 			for(int j=0;j<3;j++)
 			{
 				if(players[i]->throwDart())
@@ -65,30 +67,38 @@ int main()
 			if(winner>=0)
 				break;
 		}
-		first->setGameResults(bullseyes[0],dartsThrown[0],!winner);
-		second->setGameResults(bullseyes[1],dartsThrown[1],winner);
+		first->setGameResults(bullseyes[0],dartsThrown[0],turns[0],!winner);
+		second->setGameResults(bullseyes[1],dartsThrown[1],turns[1],winner);
 		std::cout << "\n======================================\n";
 		std::cout << winningPlayer->getName() << " wins!\n";
-		std::cout << "======================================\n";
-		std::cout << "\nAlter success rate of players? (y/N) ";
-		char choice;
-		std::cin >> choice;
-		if(choice == 'Y' || choice == 'y')
-		{
-			std::cout << "Enter success rate for Joe: ";
-			int joeNewRate;
-			std::cin >> joeNewRate;
-			joe->setSuccessRate(joeNewRate);
-
-			std::cout << "Enter success rate for Sid: ";
-			int sidNewRate;
-			std::cin >> sidNewRate;
-			sid->setSuccessRate(sidNewRate);
-		}
+		std::cout << "Turns: " << winningPlayer->getLastGameResult().turns;
+		std::cout << "\nThrows: " << winningPlayer->getLastGameResult().dartsThrown;
+		std::cout << "\nBullseyes: " << winningPlayer->getLastGameResult().bullseyes;
+		std::cout << "\n======================================\n";
 		std::cout << "Play another game? (Y/n) ";
+		char choice;
 		std::cin >> choice;
 		if(choice == 'n' || choice == 'N')
 			bPlayAgain=false;
+		else
+		{
+			std::cout << "\nAlter success rate of players? (y/N) ";
+			std::cin >> choice;
+			if(choice == 'Y' || choice == 'y')
+			{
+				std::cout << "Enter success rate for Joe: ";
+				int joeNewRate;
+				std::cin >> joeNewRate;
+				joe->updateSuccessRate(joeNewRate);
+
+				std::cout << "Enter success rate for Sid: ";
+				int sidNewRate;
+				std::cin >> sidNewRate;
+				sid->updateSuccessRate(sidNewRate);
+			}
+		}
 	}
+	delete joe;
+	delete sid;
 	return 0;
 }
